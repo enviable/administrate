@@ -1,8 +1,4 @@
-require "datetime_picker_rails"
-require "jquery-rails"
 require "kaminari"
-require "momentjs-rails"
-require "selectize-rails"
 
 require "administrate/page/form"
 require "administrate/page/show"
