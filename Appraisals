@@ -7,7 +7,7 @@ appraise "rails61" do
 end
 
 appraise "rails70" do
-  gem "rails", "~> 7.0"
+  gem "rails", "< 7.1"
 end
 
 appraise "pundit21" do
