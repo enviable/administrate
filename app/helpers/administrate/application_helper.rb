@@ -87,7 +87,7 @@ module Administrate
 
     def default_resource_name(name, opts = {})
       resource_name = (opts[:singular] ? name.to_s : name.to_s.pluralize)
-      resource_name.gsub("/", "_").titleize
+      resource_name.tr("/", "_").titleize
     end
   end
 end

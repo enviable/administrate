@@ -17,11 +17,11 @@ module Administrate
       end
 
       def name
-        resource.to_s.gsub(/^#{namespace}\//, "").to_sym
+        resource.to_s.delete_prefix("#{namespace}/").to_sym
       end
 
       def path
-        name.to_s.gsub("/", "_")
+        name.to_s.tr("/", "_")
       end
     end
   end

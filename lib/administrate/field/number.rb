@@ -25,9 +25,10 @@ module Administrate
       end
 
       def decimals
-        _left, right = data.to_s.split(".")
-        default = right.nil? ? 0 : right.size
-        options.fetch(:decimals, default)
+        options.fetch(:decimals) do
+          _left, right = data.to_s.split(".")
+          right.nil? ? 0 : right.size
+        end
       end
 
       def value

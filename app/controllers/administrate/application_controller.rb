@@ -148,7 +148,7 @@ module Administrate
     def order_by_field(dashboard)
       return unless dashboard.try(:options)
 
-      dashboard.options.fetch(:order, nil)
+      dashboard.options[:order]
     end
 
     def dashboard_attribute(attribute)
