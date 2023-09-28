@@ -12,11 +12,11 @@ module Administrate
 
     def routes
       @routes ||= begin
-        regex = %r{^#{namespace}/(.*)}
+        prefix = "#{namespace}/".freeze
         Rails.application.routes.routes.filter_map do |route|
-          route.defaults[:controller]&.slice(regex, 1)&.yield_self do |controller|
-            [controller, route.defaults[:action]]
-          end
+          next unless route.defaults[:controller]&.start_with?(prefix)
+
+          [route.defaults[:controller].delete_prefix(prefix), route.defaults[:action]]
         end
       end
     end
