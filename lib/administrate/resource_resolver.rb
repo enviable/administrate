@@ -1,44 +1,17 @@
 module Administrate
   class ResourceResolver
+    attr_accessor :dashboard_class, :namespace, :resource_class,
+                  :resource_name, :resource_title
+
     def initialize(controller_path)
       @controller_path = controller_path
+      namespace, resource_klass = controller_path.split("/", 2)
+      @namespace = namespace.to_sym
+      resource_class_name = resource_klass.classify
+      @resource_name = resource_class_name.gsub("::", "__").underscore.to_sym
+      @resource_class = resource_class_name.safe_constantize
+      @dashboard_class = ActiveSupport::Inflector.safe_constantize("#{@resource_class}Dashboard")
+      @resource_title = @resource_class&.model_name&.human
     end
-
-    def dashboard_class
-      ActiveSupport::Inflector.constantize("#{resource_class_name}Dashboard")
-    end
-
-    def namespace
-      controller_path.split("/").first.to_sym
-    end
-
-    def resource_class
-      ActiveSupport::Inflector.constantize(resource_class_name)
-    end
-
-    def resource_name
-      model_path_parts.map(&:underscore).join("__").to_sym
-    end
-
-    def resource_title
-      resource_class.model_name.human
-    end
-
-    private
-
-    def resource_class_name
-      model_path_parts.join("::")
-    end
-
-    def model_path_parts
-      controller_path_parts.map(&:camelize)
-    end
-
-    def controller_path_parts
-      path_parts = controller_path.split("/")[1..-1]
-      path_parts << path_parts.pop.singularize
-    end
-
-    attr_reader :controller_path
   end
 end
