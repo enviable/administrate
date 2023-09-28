@@ -25,7 +25,7 @@ module Administrate
       end
 
       def self.field_type
-        to_s.split("::").last.underscore
+        name.demodulize.underscore
       end
 
       def self.permitted_attribute(attr, _options = nil)
