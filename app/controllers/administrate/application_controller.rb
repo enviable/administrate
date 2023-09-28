@@ -114,7 +114,7 @@ module Administrate
     # @return [Boolean] `true` if a route exists for the resource class and the
     #   action. `false` otherwise.
     def existing_action?(resource, action_name)
-      routes.include?([resource.to_s.underscore.pluralize, action_name.to_s])
+      !!routes[resource.to_s.underscore.pluralize]&.include?(action_name.to_s)
     end
     helper_method :existing_action?
 
@@ -128,7 +128,7 @@ module Administrate
     helper_method :valid_action?
 
     def routes
-      @routes ||= Namespace.new(namespace).routes.to_set
+      @routes ||= Namespace.new(namespace).routes
     end
 
     def records_per_page

@@ -5,7 +5,7 @@ module Administrate
     end
 
     def resources
-      @resources ||= routes.map(&:first).uniq.map do |path|
+      @resources ||= routes.keys.map do |path|
         Resource.new(namespace, path)
       end
     end
@@ -13,16 +13,18 @@ module Administrate
     def routes
       @routes ||= begin
         prefix = "#{namespace}/".freeze
-        Rails.application.routes.routes.filter_map do |route|
+        Rails.application.routes.routes.each_with_object({}) do |route, memo|
           next unless route.defaults[:controller]&.start_with?(prefix)
 
-          [route.defaults[:controller].delete_prefix(prefix), route.defaults[:action]]
+          controller = -route.defaults[:controller].delete_prefix(prefix)
+          memo[controller] ||= []
+          memo[controller] << route.defaults[:action]
         end
       end
     end
 
     def resources_with_index_route
-      routes.select { |_resource, route| route == "index" }.map(&:first).uniq
+      routes.select { |_resource, routes| routes.include?("index") }.keys
     end
 
     private
