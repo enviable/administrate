@@ -128,7 +128,7 @@ module Administrate
     helper_method :valid_action?
 
     def routes
-      @routes ||= Namespace.new(namespace).routes
+      @routes ||= Namespace.find(namespace).routes
     end
 
     def records_per_page

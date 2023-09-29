@@ -29,6 +29,12 @@ module Administrate
       ]
     end
 
+    @namespaces = {}
+
+    class << self
+      attr_reader :namespaces
+    end
+
     def self.add_javascript(script)
       @@javascripts << script
     end
