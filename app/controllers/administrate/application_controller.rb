@@ -101,7 +101,7 @@ module Administrate
 
     helper_method :nav_link_state
     def nav_link_state(resource)
-      underscore_resource = resource.to_s.split("/").join("__")
+      underscore_resource = resource.to_s.gsub("/", "__")
       resource_name.to_s.pluralize == underscore_resource ? :active : :inactive
     end
 
@@ -114,7 +114,9 @@ module Administrate
     # @return [Boolean] `true` if a route exists for the resource class and the
     #   action. `false` otherwise.
     def existing_action?(resource, action_name)
-      !!routes[resource.to_s.underscore.pluralize]&.include?(action_name.to_s)
+      @existing_actions ||= {}
+      @existing_actions[[resource, action_name]] ||=
+        !!routes[resource.to_s.underscore.pluralize]&.include?(action_name.to_s)
     end
     helper_method :existing_action?
 
