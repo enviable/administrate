@@ -4,6 +4,11 @@ module Administrate
       @namespace = namespace.to_sym
     end
 
+    def self.find(namespace)
+      namespace = namespace.to_sym
+      Engine.namespaces[namespace] ||= new(namespace)
+    end
+
     def resources
       @resources ||= routes.map(&:first).uniq.map do |path|
         Resource.new(namespace, path)
