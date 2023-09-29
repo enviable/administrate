@@ -21,11 +21,11 @@ module Administrate
       private
 
       def format
-        options[:format] || :default
+        options.fetch(:format, :default)
       end
 
       def timezone
-        options[:timezone] || ::Time.zone.name || "UTC"
+        options.fetch(:timezone, ::Time.zone.name || "UTC")
       end
     end
   end

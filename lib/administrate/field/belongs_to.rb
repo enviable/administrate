@@ -35,7 +35,7 @@ module Administrate
       end
 
       def include_blank_option
-        options[:include_blank] || true
+        options.fetch(:include_blank, true)
       end
 
       private

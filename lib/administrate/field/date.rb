@@ -13,7 +13,7 @@ module Administrate
       private
 
       def format
-        options[:format] || :default
+        options.fetch(:format, :default)
       end
     end
   end

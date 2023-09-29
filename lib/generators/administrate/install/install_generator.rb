@@ -59,7 +59,7 @@ module Administrate
       end
 
       def dashboard_resources
-        Administrate::Namespace.find(namespace).resources
+        Administrate::Namespace.new(namespace).resources
       end
 
       def valid_dashboard_models

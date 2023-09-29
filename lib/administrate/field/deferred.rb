@@ -30,7 +30,7 @@ module Administrate
       end
 
       def searchable?
-        options[:searchable] || deferred_class.searchable?
+        options.fetch(:searchable) { deferred_class.searchable? }
       end
 
       def searchable_field

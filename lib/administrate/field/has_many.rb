@@ -77,8 +77,8 @@ module Administrate
 
       def order_from_params(params)
         Administrate::Order.new(
-          params[:order] || sort_by,
-          params[:direction] || direction,
+          params.fetch(:order, sort_by),
+          params.fetch(:direction, direction),
         )
       end
 

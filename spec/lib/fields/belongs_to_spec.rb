@@ -171,7 +171,7 @@ describe Administrate::Field::BelongsTo do
         )
         candidates = field.associated_resource_options
 
-        expect(field.include_blank_option). to eq(false)
+        expect(field.include_blank_option).to eq(false)
         expect(candidates).to eq([])
       end
     end
