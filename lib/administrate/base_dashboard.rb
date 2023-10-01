@@ -22,7 +22,7 @@ module Administrate
 
     class << self
       def model
-        to_s.chomp(DASHBOARD_SUFFIX).classify.constantize
+        @model ||= to_s.delete_suffix(DASHBOARD_SUFFIX).classify.constantize
       end
 
       def resource_name(opts)

@@ -8,7 +8,7 @@ module Administrate
 
       def resource_name
         @resource_name ||=
-          dashboard.class.to_s.scan(/(.+)Dashboard/).first.first.underscore
+          dashboard.class.to_s.delete_suffix("Dashboard").underscore
       end
 
       def resource_path

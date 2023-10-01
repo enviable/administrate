@@ -24,7 +24,7 @@ class LogEntryDashboard < Administrate::BaseDashboard
   end
 
   def display_logeable(logeable)
-    (logeable.class.to_s + "Dashboard").
+    "#{logeable.class}#{Administrate::BaseDashboard::DASHBOARD_SUFFIX}".
       constantize.
       new.
       display_resource(logeable)

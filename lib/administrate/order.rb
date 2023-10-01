@@ -139,7 +139,7 @@ module Administrate
     end
 
     def association_table_name
-      attribute.tableize
+      attribute.to_s.tableize
     end
   end
 end
