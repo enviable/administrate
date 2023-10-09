@@ -11,6 +11,7 @@ gem "kaminari-i18n"
 gem "pg"
 gem "pundit"
 gem "redcarpet"
+gem "sassc-rails"
 gem "sentry-raven"
 gem "unicorn"
 
