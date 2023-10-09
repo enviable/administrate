@@ -132,7 +132,7 @@ module Administrate
     helper_method :valid_action?
 
     def routes
-      @routes ||= Namespace.find(namespace).routes
+      @routes ||= Namespace.fetch(namespace).routes
     end
 
     def records_per_page

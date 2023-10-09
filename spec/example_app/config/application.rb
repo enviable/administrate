@@ -24,6 +24,14 @@ module AdministratePrototype
       generate.view_specs false
     end
 
+    ActiveSupport::Notifications.subscribe "routes_loaded.administrate" do
+      # Prefetches the namespaces and their resources/routes on boot
+
+      ::Administrate::Engine.namespaces.each do |namespace, _|
+        Administrate::Namespace.fetch(namespace)
+      end
+    end
+
     config.action_controller.action_on_unpermitted_parameters = :raise
     config.active_record.time_zone_aware_types = %i(datetime time)
 

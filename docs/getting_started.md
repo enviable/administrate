@@ -45,6 +45,11 @@ Rails.application.routes.draw do
  end
 ```
 
+Add the following to an initializer to preload the namespaces
+```ruby
+Administrate::Engine.namespaces = %i[admin]
+```
+
 The routes can be customized to show or hide
 different models on the dashboard.
 

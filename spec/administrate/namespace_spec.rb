@@ -4,12 +4,12 @@ require "administrate/namespace"
 describe Administrate::Namespace do
   describe "#resources" do
     it "searches the routes for resources in the namespace" do
-      namespace = Administrate::Namespace.new(:admin)
-
       Rails.application.routes.draw do
         namespace(:admin) { resources :customers }
         resources :administrators
       end
+
+      namespace = Administrate::Namespace.new(:admin)
 
       expect(namespace.resources.map(&:to_sym)).to eq [:customers]
     ensure
@@ -19,14 +19,13 @@ describe Administrate::Namespace do
 
   describe "#resources_with_index_route" do
     it "returns only resources with the index route" do
-      namespace = Administrate::Namespace.new(:admin)
-
       Rails.application.routes.draw do
         namespace(:admin) do
           resources :customers
           resources :products, only: [:show]
         end
       end
+      namespace = Administrate::Namespace.new(:admin)
 
       expect(namespace.resources_with_index_route).to eq ["customers"]
     ensure
@@ -34,8 +33,6 @@ describe Administrate::Namespace do
     end
 
     it "returns a list of unique resources" do
-      namespace = Administrate::Namespace.new(:admin)
-
       Rails.application.routes.draw do
         namespace(:admin) do
           resources :customers
@@ -44,6 +41,7 @@ describe Administrate::Namespace do
           root to: "customers#index"
         end
       end
+      namespace = Administrate::Namespace.new(:admin)
 
       expect(namespace.resources_with_index_route).to eq ["customers"]
     ensure

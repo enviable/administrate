@@ -32,6 +32,12 @@ module Administrate
 
     class << self
       attr_reader :namespaces
+
+      def namespaces=(namespaces)
+        namespaces.each do |namespace|
+          @namespaces[namespace.to_sym] = nil
+        end
+      end
     end
 
     def self.add_javascript(script)
