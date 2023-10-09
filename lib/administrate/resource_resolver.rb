@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Administrate
   class ResourceResolver
     attr_accessor :dashboard_class, :namespace, :resource_class,

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Administrate
   module ApplicationHelper
     PLURAL_MANY_COUNT = 2.1

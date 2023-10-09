@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Administrate
   module Generators
     # This class serves only to work around a strange behaviour in Rails 7

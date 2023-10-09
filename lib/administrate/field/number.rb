@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative "base"
 require "active_support/number_helper"
 

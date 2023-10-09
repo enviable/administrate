@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Administrate
   module GeneratorHelpers
     def call_generator(generator, *args)

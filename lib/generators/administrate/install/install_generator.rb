@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 if defined?(Zeitwerk)
   Zeitwerk::Loader.eager_load_all
 else

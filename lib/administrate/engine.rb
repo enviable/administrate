@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "jquery-rails"
 require "kaminari"
 require "selectize-rails"

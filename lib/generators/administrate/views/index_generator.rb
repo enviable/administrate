@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "administrate/view_generator"
 
 module Administrate

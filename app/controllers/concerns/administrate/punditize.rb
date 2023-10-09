@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Administrate
   module Punditize
     if Object.const_defined?("Pundit")

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "administrate/field/belongs_to"
 require "administrate/field/boolean"
 require "administrate/field/date_time"

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative "deferred"
 require "active_support/core_ext/string/inflections"
 

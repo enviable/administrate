@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Administrate
   class Order
     def initialize(attribute = nil, direction = nil, association_attribute: nil)
