@@ -22,9 +22,15 @@ module Administrate
 
     DASHBOARD_SUFFIX = "Dashboard".freeze
 
+    def self.inherited(child)
+      super
+      child.const_set(:MODEL, child.name.delete_suffix(DASHBOARD_SUFFIX).classify.safe_constantize)
+    end
+
     class << self
       def model
-        @model ||= to_s.delete_suffix(DASHBOARD_SUFFIX).classify.constantize
+        self::MODEL
+        # @model ||= to_s.delete_suffix(DASHBOARD_SUFFIX).classify.constantize
       end
 
       def resource_name(opts)

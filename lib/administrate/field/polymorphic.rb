@@ -36,8 +36,6 @@ module Administrate
         klasses.respond_to?(:call) ? klasses.call : klasses
       end
 
-      private
-
       def order
         @_order ||= options.delete(:order)
       end

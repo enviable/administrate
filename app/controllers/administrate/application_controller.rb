@@ -118,7 +118,7 @@ module Administrate
     def existing_action?(resource, action_name)
       @existing_actions ||= {}
       @existing_actions[[resource, action_name]] ||=
-        !!routes[resource.to_s.underscore.pluralize]&.include?(action_name.to_s)
+        !!routes.dig(resource.to_s.underscore.pluralize, :actions)&.include?(action_name.to_s)
     end
     helper_method :existing_action?
 
@@ -179,10 +179,6 @@ module Administrate
       Hash.try_convert(request.query_parameters[resource_name]) || {}
     end
 
-    def dashboard
-      @dashboard ||= dashboard_class.new
-    end
-
     def requested_resource
       @requested_resource ||= find_resource(params[:id]).tap do |resource|
         authorize_resource(resource)
@@ -225,15 +221,18 @@ module Administrate
       end
     end
 
-    delegate :dashboard_class, :resource_class, :resource_name, :namespace,
-      to: :resource_resolver
+    delegate :dashboard,
+             :namespace,
+             :resource_class,
+             :resource_name,
+             to: :resource_resolver
     helper_method :namespace
     helper_method :resource_name
     helper_method :resource_class
 
     def resource_resolver
       @resource_resolver ||=
-        Administrate::ResourceResolver.new(controller_path)
+        Administrate::ResourceResolver.fetch(controller_path)
     end
 
     def translate_with_resource(key)

@@ -24,8 +24,8 @@ describe CustomerDashboard do
     end
   end
 
-  def missing_attribute_message(attribute, dashboard_class)
-    "Attribute #{attribute} could not be found in #{dashboard_class}::ATTRIBUTE_TYPES"
+  def missing_attribute_message(attribute, dashboard)
+    "Attribute #{attribute} could not be found in #{dashboard}::ATTRIBUTE_TYPES"
   end
 
   describe "#attribute_type_for" do

@@ -7,7 +7,7 @@ describe Administrate::ResourceResolver do
     resolver = Administrate::ResourceResolver.new("admin/users")
 
     expect(resolver.namespace).to eq(:admin)
-    expect(resolver.dashboard_class).to eq(UserDashboard)
+    expect(resolver.dashboard).to be_a UserDashboard
     expect(resolver.resource_class).to eq(User)
     expect(resolver.resource_title).to eq("User")
     expect(resolver.resource_name).to eq(:user)
@@ -25,7 +25,7 @@ describe Administrate::ResourceResolver do
 
     resolver = Administrate::ResourceResolver.new("admin/library/books")
     expect(resolver.namespace).to eq(:admin)
-    expect(resolver.dashboard_class).to eq(Library::BookDashboard)
+    expect(resolver.dashboard).to be_a Library::BookDashboard
     expect(resolver.resource_class).to eq(Library::Book)
     expect(resolver.resource_title).to eq("Book")
     expect(resolver.resource_name).to eq(:library__book)
@@ -55,7 +55,7 @@ describe Administrate::ResourceResolver do
     resolver = Administrate::ResourceResolver.new("admin/libraries/books")
 
     expect(resolver.namespace).to eq(:admin)
-    expect(resolver.dashboard_class).to eq(Libraries::BookDashboard)
+    expect(resolver.dashboard).to be_a Libraries::BookDashboard
     expect(resolver.resource_class).to eq(Libraries::Book)
     expect(resolver.resource_title).to eq("Book")
     expect(resolver.resource_name).to eq(:libraries__book)

@@ -22,9 +22,9 @@ module Administrate
             end
           end
         related_dashboard_attributes =
-          Administrate::ResourceResolver.
-            new("admin/#{final_associated_class_name}").
-            dashboard_class.new.permitted_attributes + [:id]
+          Administrate::ResourceResolver.fetch("admin/#{final_associated_class_name}")
+                                        .dashboard
+                                        .permitted_attributes + [:id]
         { "#{attr}_attributes": related_dashboard_attributes }
       end
 
@@ -34,14 +34,14 @@ module Administrate
 
       def nested_form
         @nested_form ||= Administrate::Page::Form.new(
-          resolver.dashboard_class.new,
+          resolver.dashboard,
           data || resolver.resource_class.new,
         )
       end
 
       def nested_show
         @nested_show ||= Administrate::Page::Show.new(
-          resolver.dashboard_class.new,
+          resolver.dashboard,
           data || resolver.resource_class.new,
         )
       end
@@ -54,7 +54,7 @@ module Administrate
 
       def resolver
         @resolver ||=
-          Administrate::ResourceResolver.new("admin/#{associated_class.name}")
+          Administrate::ResourceResolver.fetch("admin/#{associated_class.name}")
       end
     end
   end

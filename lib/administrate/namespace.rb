@@ -16,7 +16,7 @@ module Administrate
     end
 
     def resources_with_index_route
-      routes.select { |_resource, routes| routes.include?("index") }.keys
+      routes.select { |_resource, routes| routes[:actions].include?("index") }.keys
     end
 
     private
@@ -33,8 +33,9 @@ module Administrate
         next unless route.defaults[:controller]&.start_with?(prefix)
 
         controller = route.defaults[:controller].delete_prefix(prefix)
-        memo[controller] ||= []
-        memo[controller] << route.defaults[:action]
+        memo[controller] ||= { actions: Set.new, resolver: nil }
+        memo[controller][:actions] ||= Set.new
+        memo[controller][:actions] << route.defaults[:action]
       end
     end
 
