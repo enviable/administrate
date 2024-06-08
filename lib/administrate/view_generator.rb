@@ -5,12 +5,17 @@ require "administrate/namespace"
 module Administrate
   class ViewGenerator < Rails::Generators::Base
     include Administrate::GeneratorHelpers
-    class_option :namespace, type: :string, default: :admin
+    class_option(
+      :namespace,
+      type: :string,
+      desc: "Namespace where the admin dashboards live",
+      default: "admin"
+    )
 
     def self.template_source_path
       File.expand_path(
         "../../../app/views/administrate/application",
-        __FILE__,
+        __FILE__
       )
     end
 
@@ -25,7 +30,7 @@ module Administrate
 
       copy_file(
         template_file,
-        "app/views/#{namespace}/#{resource_path}/#{template_file}",
+        "app/views/#{namespace}/#{resource_path}/#{template_file}"
       )
     end
 

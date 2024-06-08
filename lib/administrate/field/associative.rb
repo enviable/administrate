@@ -7,6 +7,10 @@ module Administrate
         reflection(resource_class, attr).foreign_key
       end
 
+      def self.association_primary_key_for(resource_class, attr)
+        reflection(resource_class, attr).association_primary_key
+      end
+
       def self.associated_class(resource_class, attr)
         reflection(resource_class, attr).klass
       end
@@ -37,9 +41,13 @@ module Administrate
         else
           self.class.associated_class_name(
             resource.class,
-            attribute,
+            attribute
           )
         end
+      end
+
+      def html_controller
+        "select"
       end
 
       private
@@ -49,10 +57,16 @@ module Administrate
       end
 
       def primary_key
+        # Deprecated, renamed `association_primary_key`
+        Administrate.warn_of_deprecated_method(self.class, :primary_key)
+        association_primary_key
+      end
+
+      def association_primary_key
         if option_given?(:primary_key)
           deprecated_option(:primary_key)
         else
-          :id
+          self.class.association_primary_key_for(resource.class, attribute)
         end
       end
 

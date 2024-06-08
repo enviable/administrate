@@ -113,8 +113,11 @@ association `belongs_to :country`, from your model.
 
 **Field::HasMany**
 
-`:limit` - Set the number of resources to display in the show view. Default is
-`5`.
+`:collection_attributes` - Set the columns to display in the show view. 
+Default is COLLECTION_ATTRIBUTES in dashboard.
+
+`:limit` - The number of resources (paginated) to display in the show view. To disable pagination,
+set this to `0` or `false`. Default is `5`.
 
 `:sort_by` - What to sort the association by in the show view.
 
@@ -127,6 +130,10 @@ association `belongs_to :country`, from your model.
 `:class_name` (deprecated) - Specifies the name of the associated class.
 
 **Field::HasOne**
+
+`:order` - Specifies the column used to order the records. It will apply both in
+the table views and in the dropdown menu on the record forms.
+You can set multiple columns as well with direction. E.g.: `"name, email DESC"`.
 
 `:searchable` - Specify if the attribute should be considered when searching.
 Default is `false`.
@@ -164,8 +171,7 @@ more results than expected. Default is `false`.
 and works by  by passing a hash that includes the formatter (`formatter`) and
 the options for the formatter (`formatter_options`). Defaults to the locale's
 delimiter when `formatter_options` does not include a `delimiter`. See the
-example below. Note that currently only
-`ActiveSupport::NumberHelper.number_to_delimited` is supported.
+example below. All helpers from `ActiveSupport::NumberHelper` are supported.
 
 For example, you might use the following to display U.S. currency:
 
@@ -218,25 +224,31 @@ objects to display as.
 
 **Field::Select**
 
-`:collection` - Specify the options shown on the select field. It accept either
-an array or an object responding to `:call`. Defaults to `[]`.
+`:collection` - The options available to select. The format is the same as for Rails's own [`options_for_select`](https://api.rubyonrails.org/classes/ActionView/Helpers/FormOptionsHelper.html#method-i-options_for_select).
 
-To customize option labels, pass an array of pairs where the first element is the value submitted with the form and the second element is the label shown to the user.
-
-For example:
+If the given value responds to `call`, this will be called and the result used instead. The call will receive an instance of the field as argument. For example:
 
 ```ruby
-  currency = Field::Select.with_options(
-    collection: [ ['usd', 'Dollar'], ['eur', 'Euro'], ['yen', 'Yen'] ]
+  confirmation: Field::Select.with_options(
+    collection: ->(field) {
+      person = field.resource
+      {
+        "no, #{person.name}" => "opt0",
+        "yes, #{person.name}" => "opt1",
+        "absolutely, #{person.name}" => "opt2",
+      }
+    },
   )
-
 ```
+
+Administrate will detect if the attribute is an `ActiveRecord::Enum` and extract the available options. Note that if a `collection` is provided it will take precedence.
+
+If no collection is provided and no enum can be detected, the list of options will be empty.
 
 `:searchable` - Specify if the attribute should be considered when searching.
 Default is `true`.
 
-`:include_blank` - Specifies if the select element to be rendered should include
-blank option. Default is `false`.
+`:include_blank` - Similar to [the option of the same name accepted by Rails helpers](https://api.rubyonrails.org/classes/ActionView/Helpers/FormOptionsHelper.html). If provided, a "blank" option will be added first to the list of options, with the value of `include_blank` as label.
 
 **Field::String**
 
@@ -373,3 +385,54 @@ FORM_ATTRIBUTES_EDIT = [
 ```
 
 Or for custom action with constant name `"FORM_ATTRIBUTES_#{action.upcase}"`
+
+### Form Fields' Hints
+
+You can show a brief text element below an input field by setting the
+corresponding translation key using the path:
+
+`administrate.field_hints.#{model_name}.#{field_name}`
+
+For example, with a Customer dashboard with an email field you can add a
+string value that will be used as text hint:
+
+```yml
+en:
+  administrate:
+    field_hints:
+      customer:
+        email: field_hint
+```
+
+## Grouped Attributes
+
+You may have models with a large number of fields and therefore you might want to group them in a meaningul way:
+
+```ruby
+class UserDashboard < Administrate::BaseDashboard
+  SHOW_PAGE_ATTRIBUTES = {
+    "" => [:username],
+    "Personal Information" => [:first_name, :last_name, :email],
+    "Address" => [:address_line_one, :address_line_two, :address_city, :address_state, :address_country]
+  }
+
+  FORM_ATTRIBUTES = {
+    "" => [:username, :password, :password_confirmation],
+    "personal_information" => [:first_name, :last_name, :email],
+    "address" => [:address_line_one, :address_line_two, :address_city, :address_state, :address_country]
+  }
+end
+```
+
+You can optionally translate your group labels:
+
+```yaml
+en:
+  helpers:
+    label:
+      user:
+        address: Address
+        personal_information: Personal Information
+```
+
+If not defined (see `SHOW_PAGE_ATTRIBUTES` above), Administrate will default to the given strings.

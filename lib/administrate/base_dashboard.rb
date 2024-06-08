@@ -7,6 +7,7 @@ require "administrate/field/has_many"
 require "administrate/field/has_one"
 require "administrate/field/number"
 require "administrate/field/polymorphic"
+require "administrate/field/rich_text"
 require "administrate/field/select"
 require "administrate/field/string"
 require "administrate/field/text"
@@ -51,6 +52,12 @@ module Administrate
     end
 
     def form_attributes(action = nil)
+      action =
+        case action
+        when "update" then "edit"
+        when "create" then "new"
+        else action
+        end
       specific_form_attributes_for(action) || self.class::FORM_ATTRIBUTES
     end
 
@@ -62,11 +69,18 @@ module Administrate
       self.class.const_get(cname) if self.class.const_defined?(cname)
     end
 
-    def permitted_attributes
-      form_attributes.map do |attr|
+    def permitted_attributes(action = nil)
+      attributes = form_attributes action
+
+      if attributes.is_a? Hash
+        attributes = attributes.values.flatten
+      end
+
+      attributes.map do |attr|
         attribute_types[attr].permitted_attribute(
           attr,
           resource_class: self.class.model,
+          action: action
         )
       end.uniq
     end
@@ -76,7 +90,11 @@ module Administrate
     end
 
     def collection_attributes
-      self.class::COLLECTION_ATTRIBUTES
+      if self.class::COLLECTION_ATTRIBUTES.is_a?(Hash)
+        self.class::COLLECTION_ATTRIBUTES.values.flatten
+      else
+        self.class::COLLECTION_ATTRIBUTES
+      end
     end
 
     def search_attributes
@@ -100,7 +118,12 @@ module Administrate
     end
 
     def item_associations
-      attribute_associated(show_page_attributes)
+      attributes = if show_page_attributes.is_a?(Hash)
+        show_page_attributes.values.flatten
+      else
+        show_page_attributes
+      end
+      attribute_associated attributes
     end
 
     private

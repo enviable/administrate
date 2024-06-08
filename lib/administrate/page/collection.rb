@@ -4,7 +4,8 @@ module Administrate
   module Page
     class Collection < Page::Base
       def attribute_names
-        dashboard.collection_attributes
+        options.fetch(:collection_attributes, nil) ||
+          dashboard.collection_attributes
       end
 
       def attributes_for(resource)
@@ -24,7 +25,7 @@ module Administrate
       delegate :ordered_by?, to: :order
 
       def order_params_for(attr, key: resource_name)
-        { key => order.order_params_for(attr) }
+        {key => order.order_params_for(attr)}
       end
 
       private
